@@ -35,14 +35,6 @@ object Routes extends IOApp {
 
   import db.DatabaseConf._
 
-  object IdParamQueryMatcher extends QueryParamDecoderMatcher[Long]("id")
-
-
-  // GET /products  butun productlari qaytaracaq
-  // GET /product/id  bit product qaytaracaq
-  // POST /product  her hansi bir productu bazaya yazacaq
-  // DELETE /product/id   bir productu silecek
-
   def routes[F[_]: Monad]: HttpRoutes[F] = {
     val dsl = Http4sDsl[F]
     import dsl._
@@ -75,7 +67,7 @@ object Routes extends IOApp {
                 case Failure(exception) => Ok("No result")
                 case Success(value) => Ok(value.asJson)
               }
-            case None => Ok("No result")
+            case None => BadRequest("No result")
           }
        }
       case DELETE -> Root / id => Ok{
